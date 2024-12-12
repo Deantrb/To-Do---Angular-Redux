@@ -1,5 +1,5 @@
 <ul class="todo-list">
-  @for (todo of todos; track $index) {
+  @for (todo of transformTodo(); track $index) {
     <app-todo-item [todo]="todo"></app-todo-item>
   }
 

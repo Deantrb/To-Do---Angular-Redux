@@ -2,7 +2,7 @@ import {Action, createReducer, on} from "@ngrx/store";
 import {filtrosValidos, setFiltro} from "./filtro.actions";
 
 
-export const initialState: filtrosValidos = {filtro: 'todos'};
+export const initialState: filtrosValidos = {filtro: 'all'};
 const _filtroReducer = createReducer(initialState,
   on(setFiltro, (state, {filtroInt}) => ({...state,
   filtro:filtroInt}))

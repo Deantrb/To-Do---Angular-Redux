@@ -12,11 +12,16 @@ export const toggleCompleted = createAction(
 
 export const editingTodo = createAction(
   '[TODO] Change Text',
-  props<{ id: number, texto:string }>()
+  props<{ id: number; texto: string }>()
 );
 export const deleteTodo = createAction(
   '[TODO] Delete Todo',
-  props<{ id: number}>()
+  props<{ id: number }>()
 );
 
-export const toggleAll = createAction('[TODO] Toggle All', props<{completed:boolean}>());
+export const toggleAll = createAction(
+  '[TODO] Toggle All',
+  props<{ completed: boolean }>()
+);
+
+export const cleanCompleted = createAction('[TODO] Clean Completed');

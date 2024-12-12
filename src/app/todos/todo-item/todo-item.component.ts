@@ -13,24 +13,24 @@ import * as actions from '../todo.actions';
 export class TodoItemComponent {
   @ViewChild('inputFisico') txtInputFisico!: ElementRef;
   @Input() todo!: Todo;
-  chkCompleted!: FormControl;
+  chkCompleted: boolean = false;
   txtEdit!: FormControl;
   editando: boolean = false;
 
   constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
-    this.chkCompleted = new FormControl(this.todo.completado);
-    this.txtEdit = new FormControl(this.todo.texto, Validators.required);
-
-    this.chkCompleted.valueChanges.subscribe(() => {
-      this.store.dispatch(actions.toggleCompleted({ id: this.todo.id }));
+    this.store.select('todos').subscribe((todos) => {
+      // this.chkCompleted = new FormControl(todos.find(todo => todo.id === this.todo.id)?.completado);
     });
+    this.txtEdit = new FormControl(this.todo.texto, Validators.required);
+  }
+  toggleCompletedCheck() {
+    this.store.dispatch(actions.toggleCompleted({ id: this.todo.id }));
   }
   editar() {
     this.editando = true;
-    this.txtEdit.setValue(this.todo.texto)
-
+    this.txtEdit.setValue(this.todo.texto);
 
     setTimeout(() => {
       this.txtInputFisico.nativeElement.select();
@@ -40,14 +40,14 @@ export class TodoItemComponent {
   endEditing() {
     this.editando = false;
 
-    if(this.txtEdit.invalid) return
-    if(this.txtEdit.value === this.todo.texto) return
+    if (this.txtEdit.invalid) return;
+    if (this.txtEdit.value === this.todo.texto) return;
 
     this.store.dispatch(
       actions.editingTodo({ id: this.todo.id, texto: this.txtEdit.value })
     );
   }
-  deleteTodo(){
-    this.store.dispatch(actions.deleteTodo({id:this.todo.id}))
+  deleteTodo() {
+    this.store.dispatch(actions.deleteTodo({ id: this.todo.id }));
   }
 }
