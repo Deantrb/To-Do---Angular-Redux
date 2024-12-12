@@ -1,6 +1,13 @@
-import {Action, createReducer, on} from '@ngrx/store';
-import {cleanCompleted, crear, deleteTodo, editingTodo, toggleAll, toggleCompleted} from './todo.actions';
-import {Todo} from './models/todo.model';
+import { Action, createReducer, on } from '@ngrx/store';
+import {
+  cleanCompleted,
+  crear,
+  deleteTodo,
+  editingTodo,
+  toggleAll,
+  toggleCompleted,
+} from './todo.actions';
+import { Todo } from './models/todo.model';
 
 export const initialState: Todo[] = [
   new Todo('Comprar leche'),
@@ -10,10 +17,16 @@ export const initialState: Todo[] = [
 
 export const _todoReducer = createReducer(
   initialState,
-  on(crear, (state, {texto}) => [...state, new Todo(texto)]),
-  on(deleteTodo, (state, {id}) => state.filter(todo => todo.id !== id)),
-  on(toggleCompleted, (state, {id}) => {
-    return state.map((todo) => {
+  on(crear, (state, { texto }) => [...state, new Todo(texto)]),
+  on(deleteTodo, (state, { id }) => state.filter((todo) => todo.id !== id)),
+  on(toggleAll, (state, { completed }) =>
+    state.map((todo) => {
+      return { ...todo, completado: completed };
+    })
+  ),
+  on(cleanCompleted, (state) => state.filter((todo) => !todo.completado)),
+  on(toggleCompleted, (state, { id }) =>
+    state.map((todo) => {
       if (todo.id === id) {
         return {
           ...todo,
@@ -22,10 +35,10 @@ export const _todoReducer = createReducer(
       } else {
         return todo;
       }
-    });
-  }),
-  on(editingTodo, (state, {id, texto}) => {
-    return state.map((todo) => {
+    })
+  ),
+  on(editingTodo, (state, { id, texto }) =>
+    state.map((todo) => {
       if (todo.id === id) {
         return {
           ...todo,
@@ -34,12 +47,8 @@ export const _todoReducer = createReducer(
       } else {
         return todo;
       }
-    });
-  }),
-  on(toggleAll, (state, {completed}) => state.map((todo) => {
-    return {...todo, completado: completed}
-  })),
-  on(cleanCompleted,(state) => state.filter(todo => !todo.completado)),
+    })
+  )
 );
 
 export function todoReducer(state: Todo[] | undefined, actions: Action) {
